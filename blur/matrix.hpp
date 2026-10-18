@@ -2,6 +2,9 @@
 Author: David Holmqvist <daae19@student.bth.se>
 */
 
+// Optimization overview: V2 adds writable channel getters for direct blur access.
+// Existing read-only getters and pixel accessors remain available.
+
 #include <iostream>
 
 #if !defined(MATRIX_HPP)
@@ -32,6 +35,15 @@ public:
     unsigned char const* get_R() const;
     unsigned char const* get_G() const;
     unsigned char const* get_B() const;
+
+    // V2: Previously channel getters were read-only; writes used r/g/b.
+    // These three overloads expose existing writable arrays without copying.
+    // They support shared row/neighbor indices in blur, reducing repeated accessor
+    // work. Callers must use this matrix's own width, stay within its allocation,
+    // and keep the matrix alive; these pointers do not transfer ownership.
+    unsigned char* get_R();
+    unsigned char* get_G();
+    unsigned char* get_B();
 
     unsigned char r(unsigned x, unsigned y) const;
     unsigned char g(unsigned x, unsigned y) const;

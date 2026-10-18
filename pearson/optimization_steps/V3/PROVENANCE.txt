@@ -1,0 +1,1 @@
+Reconstructed from archived V4 by restoring get_size() in the second loop, matching the V3 source shown by the student in the conversation. Not an original archived snapshot.

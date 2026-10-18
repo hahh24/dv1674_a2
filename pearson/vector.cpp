@@ -2,6 +2,9 @@
 Author: David Holmqvist <daae19@student.bth.se>
 */
 
+// Optimization overview: V1 borrows dot input and makes value operators const.
+// V5 adds const get_data() for direct, read-only access to existing storage.
+
 #include "vector.hpp"
 #include <iostream>
 #include <cmath>
@@ -79,7 +82,10 @@ double Vector::magnitude() const
     return std::sqrt(dot_prod);
 }
 
-Vector Vector::operator/(double div)
+// V1: Division and subtraction still return modified copies. Adding const
+// permits read-only use because the source is unchanged; const itself is
+// not a separately proven speed optimization.
+Vector Vector::operator/(double div) const
 {
     auto result{*this};
 
@@ -91,7 +97,7 @@ Vector Vector::operator/(double div)
     return result;
 }
 
-Vector Vector::operator-(double sub)
+Vector Vector::operator-(double sub) const
 {
     auto result{*this};
 
@@ -103,7 +109,9 @@ Vector Vector::operator-(double sub)
     return result;
 }
 
-double Vector::dot(Vector rhs) const
+// V1: Previously rhs was copied. We now borrow it read-only to avoid that
+// copy; rhs must stay alive and contain at least as many elements as this vector.
+double Vector::dot(const Vector& rhs) const
 {
     double result{0};
 
@@ -113,4 +121,12 @@ double Vector::dot(Vector rhs) const
     }
 
     return result;
+}
+
+// V5: The old getter required a mutable Vector. This overload lets const
+// inputs expose their existing array without copying or transferring ownership.
+// Callers must keep the owner alive and keep indices within its size.
+const double* Vector::get_data() const
+{
+    return data;
 }

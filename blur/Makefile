@@ -1,21 +1,35 @@
-# Author: David Holmqvist <daae19@student.bth.se>
+# Build overview: Sequential and pthread parallel executables share helpers.
+CXX = g++
+CXXFLAGS = -std=c++17 -g -Wunused -Wall
+# -pthread selects pthread support at both compilation and linking below.
+THREADFLAGS = -pthread
 
-CXX=g++
-CXXFLAGS=-std=c++17 -g -Wunused -Wall -Wunused
+all: blur blur_par
 
-all: blur
+# Build the optimized sequential executable.
+blur: blur.o matrix.o ppm.o filters.o
+	$(CXX) $(CXXFLAGS) $^ -o $@
 
-blur: matrix ppm filters blur.cpp
-	$(CXX) $(CXXFLAGS) blur.cpp matrix.o ppm.o filters.o -o blur
+# Build the parallel executable; linking also needs -pthread.
+blur_par: blur_par.o matrix.o ppm.o filters.o filters_par.o
+	$(CXX) $(CXXFLAGS) $(THREADFLAGS) $^ -o $@
 
-filters: matrix filters.hpp filters.cpp
-	$(CXX) $(CXXFLAGS) -c filters.cpp -o filters.o
+blur.o: blur.cpp matrix.hpp ppm.hpp filters.hpp
+matrix.o: matrix.cpp matrix.hpp ppm.hpp
+ppm.o: ppm.cpp ppm.hpp matrix.hpp
+filters.o: filters.cpp filters.hpp matrix.hpp ppm.hpp
+blur_par.o: blur_par.cpp filters_par.hpp matrix.hpp ppm.hpp
+filters_par.o: filters_par.cpp filters_par.hpp filters.hpp matrix.hpp ppm.hpp
 
-matrix: matrix.hpp matrix.cpp
-	$(CXX) $(CXXFLAGS) -c matrix.cpp -o matrix.o
+# Compile the parallel translation units with -pthread as well.
+blur_par.o filters_par.o:
+	$(CXX) $(CXXFLAGS) $(THREADFLAGS) -c $< -o $@
 
-ppm: ppm.hpp ppm.cpp
-	$(CXX) $(CXXFLAGS) -c ppm.cpp -o ppm.o
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+# Remove built executables and object files so the next build starts fresh.
 clean:
-	rm -rf blur *.ppm *.o *.dSYM 2> /dev/null
+	rm -f blur blur_par *.o
+
+.PHONY: all clean

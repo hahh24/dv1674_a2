@@ -1,0 +1,662 @@
+--------------------------------------------------------------------------------
+Profile data file 'profiling/blur_im1.out' (creator: callgrind-3.18.1)
+--------------------------------------------------------------------------------
+I1 cache: 
+D1 cache: 
+LL cache: 
+Timerange: Basic block 0 - 1610656766
+Trigger: Program termination
+Profiled target:  ./blur 15 data/im1.ppm profiling/im1_output.ppm (PID 22151, part 1)
+Events recorded:  Ir
+Events shown:     Ir
+Event sort order: Ir
+Thresholds:       99
+Include dirs:     
+User annotated:   
+Auto-annotation:  on
+
+--------------------------------------------------------------------------------
+Ir                     
+--------------------------------------------------------------------------------
+6,838,922,864 (100.0%)  PROGRAM TOTALS
+
+--------------------------------------------------------------------------------
+Ir                      file:function
+--------------------------------------------------------------------------------
+2,899,718,320 (42.40%)  filters.cpp:Filter::blur(Matrix, int) [/home/hahh24/dv1674_a2/blur/blur]
+  615,823,848 ( 9.00%)  matrix.cpp:Matrix::b(unsigned int, unsigned int) [/home/hahh24/dv1674_a2/blur/blur]
+  615,823,848 ( 9.00%)  matrix.cpp:Matrix::g(unsigned int, unsigned int) [/home/hahh24/dv1674_a2/blur/blur]
+  615,823,848 ( 9.00%)  matrix.cpp:Matrix::r(unsigned int, unsigned int) [/home/hahh24/dv1674_a2/blur/blur]
+  521,977,456 ( 7.63%)  ./math/../sysdeps/ieee754/dbl-64/e_exp.c:__ieee754_exp_fma [/usr/lib/x86_64-linux-gnu/libm.so.6]
+  496,188,056 ( 7.26%)  filters.cpp:Filter::Gauss::get_weights(int, double*) [/home/hahh24/dv1674_a2/blur/blur]
+  264,083,456 ( 3.86%)  ./math/./w_exp_template.c:exp@@GLIBC_2.29 [/usr/lib/x86_64-linux-gnu/libm.so.6]
+   88,226,298 ( 1.29%)  matrix.cpp:Matrix::Matrix(Matrix const&) [/home/hahh24/dv1674_a2/blur/blur]
+   70,158,000 ( 1.03%)  matrix.cpp:Matrix::get_y_size() const [/home/hahh24/dv1674_a2/blur/blur]
+   61,905,408 ( 0.91%)  matrix.cpp:Matrix::get_x_size() const [/home/hahh24/dv1674_a2/blur/blur]
+   60,347,877 ( 0.88%)  ???:std::ostream::put(char) [/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30]
+   57,252,468 ( 0.84%)  ???:std::istream::read(char*, long) [/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30]
+   49,515,666 ( 0.72%)  ???:std::basic_streambuf<char, std::char_traits<char> >::xsgetn(char*, long) [/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30]
+   47,452,496 ( 0.69%)  ./math/../sysdeps/ieee754/dbl-64/math_config.h:__ieee754_exp_fma
+   43,326,304 ( 0.63%)  ???:std::istream::sentry::sentry(std::istream&, bool) [/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30]
+   35,589,701 ( 0.52%)  ???:std::ostream::sentry::sentry(std::ostream&) [/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30]
+   34,042,008 ( 0.50%)  ???:std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, unsigned char) [/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30]
+   33,010,432 ( 0.48%)  ???:0x000000000010f020 [???]
+   33,010,432 ( 0.48%)  ???:0x0000000004a88380 [???]
+   29,399,916 ( 0.43%)  matrix.cpp:Matrix::b(unsigned int, unsigned int) const [/home/hahh24/dv1674_a2/blur/blur]
+   29,399,916 ( 0.43%)  matrix.cpp:Matrix::g(unsigned int, unsigned int) const [/home/hahh24/dv1674_a2/blur/blur]
+   29,399,916 ( 0.43%)  matrix.cpp:Matrix::r(unsigned int, unsigned int) const [/home/hahh24/dv1674_a2/blur/blur]
+   28,368,390 ( 0.41%)  ppm.cpp:PPM::Reader::get_data(unsigned int, unsigned int) [/home/hahh24/dv1674_a2/blur/blur]
+   26,070,012 ( 0.38%)  ./string/../sysdeps/x86_64/multiarch/memmove-vec-unaligned-erms.S:__memcpy_avx_unaligned_erms [/usr/lib/x86_64-linux-gnu/libc.so.6]
+
+--------------------------------------------------------------------------------
+-- Auto-annotated source: filters.cpp
+--------------------------------------------------------------------------------
+Ir                   
+
+-- line 8 ----------------------------------------
+          .           #include <cmath>
+          .           
+          .           namespace Filter
+          .           {
+          .           
+          .               namespace Gauss
+          .               {
+          .                   void get_weights(int n, double *weights_out)
+  7,221,032 ( 0.11%)          {
+ 71,178,744 ( 1.04%)              for (auto i{0}; i <= n; i++)
+          .                       {
+132,041,728 ( 1.93%)                  double x{static_cast<double>(i) * max_x / n};
+280,588,672 ( 4.10%)                  weights_out[i] = exp(-x * x * pi);
+899,534,272 (13.15%)  => ???:0x000000000010f020 (16,505,216x)
+          .                       }
+  5,157,880 ( 0.08%)          }
+          .               }
+          .           
+          .               Matrix blur(Matrix m, const int radius)
+         15 ( 0.00%)      {
+          4 ( 0.00%)          Matrix scratch{PPM::max_dimension};
+        969 ( 0.00%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::Matrix(unsigned int) (1x)
+          5 ( 0.00%)          auto dst{m};
+ 86,662,347 ( 1.27%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::Matrix(Matrix const&) (1x)
+          .           
+      6,094 ( 0.00%)          for (auto x{0}; x < dst.get_x_size(); x++)
+      5,416 ( 0.00%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::get_x_size() const (677x)
+          .                   {
+  4,648,852 ( 0.07%)              for (auto y{0}; y < dst.get_y_size(); y++)
+  4,131,712 ( 0.06%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::get_y_size() const (516,464x)
+          .                       {
+518,366,940 ( 7.58%)                  double w[Gauss::max_radius]{};
+  2,578,940 ( 0.04%)                  Gauss::get_weights(radius, w);
+697,861,164 (10.20%)  => filters.cpp:Filter::Gauss::get_weights(int, double*) (515,788x)
+          .           
+          .                           // unsigned char Matrix::r(unsigned x, unsigned y) const
+          .                           // {
+          .                           //     return R[y * x_size + x];
+          .                           // }
+          .           
+ 22,694,672 ( 0.33%)                  auto r{w[0] * dst.r(x, y)}, g{w[0] * dst.g(x, y)}, b{w[0] * dst.b(x, y)}, n{w[0]};
+  9,284,184 ( 0.14%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::b(unsigned int, unsigned int) (515,788x)
+  9,284,184 ( 0.14%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::g(unsigned int, unsigned int) (515,788x)
+  9,284,184 ( 0.14%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::r(unsigned int, unsigned int) (515,788x)
+          .           
+ 33,526,220 ( 0.49%)                  for (auto wi{1}; wi <= radius; wi++)
+          .                           {
+ 30,947,280 ( 0.45%)                      auto wc{w[wi]};
+ 23,210,460 ( 0.34%)                      auto x2{x - wi};
+ 15,473,640 ( 0.23%)                      if (x2 >= 0)
+          .                               {
+107,033,640 ( 1.57%)                          r += wc * dst.r(x2, y);
+137,614,680 ( 2.01%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::r(unsigned int, unsigned int) (7,645,260x)
+107,033,640 ( 1.57%)                          g += wc * dst.g(x2, y);
+137,614,680 ( 2.01%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::g(unsigned int, unsigned int) (7,645,260x)
+107,033,640 ( 1.57%)                          b += wc * dst.b(x2, y);
+137,614,680 ( 2.01%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::b(unsigned int, unsigned int) (7,645,260x)
+ 22,935,780 ( 0.34%)                          n += wc;
+          .                               }
+ 30,947,280 ( 0.45%)                      x2 = x + wi;
+ 61,894,560 ( 0.91%)                      if (x2 < dst.get_x_size())
+ 61,894,560 ( 0.91%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::get_x_size() const (7,736,820x)
+          .                               {
+107,033,640 ( 1.57%)                          r += wc * dst.r(x2, y);
+137,614,680 ( 2.01%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::r(unsigned int, unsigned int) (7,645,260x)
+107,033,640 ( 1.57%)                          g += wc * dst.g(x2, y);
+137,614,680 ( 2.01%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::g(unsigned int, unsigned int) (7,645,260x)
+107,033,640 ( 1.57%)                          b += wc * dst.b(x2, y);
+137,614,680 ( 2.01%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::b(unsigned int, unsigned int) (7,645,260x)
+ 22,935,780 ( 0.34%)                          n += wc;
+          .                               }
+          .                           }
+  5,673,668 ( 0.08%)                  scratch.r(x, y) = r / n;
+  9,284,184 ( 0.14%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::r(unsigned int, unsigned int) (515,788x)
+  5,673,668 ( 0.08%)                  scratch.g(x, y) = g / n;
+  9,284,184 ( 0.14%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::g(unsigned int, unsigned int) (515,788x)
+  5,673,668 ( 0.08%)                  scratch.b(x, y) = b / n;
+  9,284,184 ( 0.14%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::b(unsigned int, unsigned int) (515,788x)
+          .                       }
+          .                   }
+          .           
+      6,094 ( 0.00%)          for (auto x{0}; x < dst.get_x_size(); x++)
+      5,416 ( 0.00%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::get_x_size() const (677x)
+          .                   {
+  4,648,852 ( 0.07%)              for (auto y{0}; y < dst.get_y_size(); y++)
+  4,131,712 ( 0.06%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::get_y_size() const (516,464x)
+          .                       {
+518,366,940 ( 7.58%)                  double w[Gauss::max_radius]{};
+  2,578,940 ( 0.04%)                  Gauss::get_weights(radius, w);
+697,861,164 (10.20%)  => filters.cpp:Filter::Gauss::get_weights(int, double*) (515,788x)
+          .           
+ 22,694,672 ( 0.33%)                  auto r{w[0] * scratch.r(x, y)}, g{w[0] * scratch.g(x, y)}, b{w[0] * scratch.b(x, y)}, n{w[0]};
+  9,284,184 ( 0.14%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::b(unsigned int, unsigned int) (515,788x)
+  9,284,184 ( 0.14%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::r(unsigned int, unsigned int) (515,788x)
+  9,284,184 ( 0.14%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::g(unsigned int, unsigned int) (515,788x)
+          .           
+ 33,526,220 ( 0.49%)                  for (auto wi{1}; wi <= radius; wi++)
+          .                           {
+ 30,947,280 ( 0.45%)                      auto wc{w[wi]};
+ 23,210,460 ( 0.34%)                      auto y2{y - wi};
+ 15,473,640 ( 0.23%)                      if (y2 >= 0)
+          .                               {
+107,179,800 ( 1.57%)                          r += wc * scratch.r(x, y2);
+137,802,600 ( 2.01%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::r(unsigned int, unsigned int) (7,655,700x)
+107,179,800 ( 1.57%)                          g += wc * scratch.g(x, y2);
+137,802,600 ( 2.01%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::g(unsigned int, unsigned int) (7,655,700x)
+107,179,800 ( 1.57%)                          b += wc * scratch.b(x, y2);
+137,802,600 ( 2.01%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::b(unsigned int, unsigned int) (7,655,700x)
+ 22,967,100 ( 0.34%)                          n += wc;
+          .                               }
+ 30,947,280 ( 0.45%)                      y2 = y + wi;
+ 61,894,560 ( 0.91%)                      if (y2 < dst.get_y_size())
+ 61,894,560 ( 0.91%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::get_y_size() const (7,736,820x)
+          .                               {
+107,179,800 ( 1.57%)                          r += wc * scratch.r(x, y2);
+137,802,600 ( 2.01%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::r(unsigned int, unsigned int) (7,655,700x)
+107,179,800 ( 1.57%)                          g += wc * scratch.g(x, y2);
+137,802,600 ( 2.01%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::g(unsigned int, unsigned int) (7,655,700x)
+107,179,800 ( 1.57%)                          b += wc * scratch.b(x, y2);
+137,802,600 ( 2.01%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::b(unsigned int, unsigned int) (7,655,700x)
+ 22,967,100 ( 0.34%)                          n += wc;
+          .                               }
+          .                           }
+  5,673,668 ( 0.08%)                  dst.r(x, y) = r / n;
+  9,284,184 ( 0.14%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::r(unsigned int, unsigned int) (515,788x)
+  5,673,668 ( 0.08%)                  dst.g(x, y) = g / n;
+  9,284,184 ( 0.14%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::g(unsigned int, unsigned int) (515,788x)
+  5,673,668 ( 0.08%)                  dst.b(x, y) = b / n;
+  9,284,184 ( 0.14%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::b(unsigned int, unsigned int) (515,788x)
+          .                       }
+          .                   }
+          .           
+          2 ( 0.00%)          return dst;
+         10 ( 0.00%)      }
+        288 ( 0.00%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::~Matrix() (1x)
+          .           
+         21 ( 0.00%)  }
+        127 ( 0.00%)  => filters.cpp:__static_initialization_and_destruction_0(int, int) (1x)
+
+--------------------------------------------------------------------------------
+-- Auto-annotated source: ppm.cpp
+--------------------------------------------------------------------------------
+Ir                 
+
+-- line 6 ----------------------------------------
+        .           #include <fstream>
+        .           #include <iostream>
+        .           #include <regex>
+        .           #include <stdexcept>
+        .           
+        .           namespace PPM {
+        .           
+        .           void Reader::fill(std::string filename)
+       10 ( 0.00%)  {
+        3 ( 0.00%)      std::ifstream f {};
+    5,566 ( 0.00%)  => ???:0x000000000010ed80 (1x)
+        .           
+        6 ( 0.00%)      f.open(filename);
+    7,528 ( 0.00%)  => ???:0x000000000010ec40 (1x)
+        .           
+        6 ( 0.00%)      if (!f) {
+        6 ( 0.00%)  => ???:0x000000000010ea80 (1x)
+        .                   stream.setstate(std::ios::failbit);
+        .                   return;
+        .               }
+        .           
+       24 ( 0.00%)      std::copy(
+1,356,231 ( 0.02%)  => /usr/include/c++/11/bits/streambuf_iterator.h:__gnu_cxx::__enable_if<std::__is_char<char>::__value, std::ostreambuf_iterator<char, std::char_traits<char> > >::__type std::copy<char>(std::istreambuf_iterator<char, std::char_traits<char> >, std::istreambuf_iterator<char, std::char_traits<char> >, std::ostreambuf_iterator<char, std::char_traits<char> >) (1x)
+       31 ( 0.00%)  => /usr/include/c++/11/bits/streambuf_iterator.h:std::ostreambuf_iterator<char, std::char_traits<char> >::ostreambuf_iterator(std::ostream&) (1x)
+       21 ( 0.00%)  => /usr/include/c++/11/bits/streambuf_iterator.h:std::istreambuf_iterator<char, std::char_traits<char> >::istreambuf_iterator(std::basic_streambuf<char, std::char_traits<char> >*) (1x)
+       19 ( 0.00%)  => /usr/include/c++/11/bits/streambuf_iterator.h:std::istreambuf_iterator<char, std::char_traits<char> >::istreambuf_iterator() (1x)
+        4 ( 0.00%)          std::istreambuf_iterator<char> { f.rdbuf() },
+        5 ( 0.00%)  => ???:0x000000000010ef10 (1x)
+        .                   std::istreambuf_iterator<char> {},
+        .                   std::ostreambuf_iterator<char> { stream });
+        .           
+        3 ( 0.00%)      f.close();
+    5,593 ( 0.00%)  => ???:0x000000000010e940 (1x)
+       11 ( 0.00%)  }
+    3,524 ( 0.00%)  => ???:0x000000000010e970 (1x)
+        .           
+        .           std::string Reader::get_magic_number()
+        7 ( 0.00%)  {
+        3 ( 0.00%)      std::string magic {};
+        8 ( 0.00%)  => ???:0x000000000010ee70 (1x)
+        .           
+        5 ( 0.00%)      std::getline(stream, magic);
+    6,867 ( 0.00%)  => ???:0x000000000010e910 (1x)
+        .           
+        1 ( 0.00%)      return magic;
+        4 ( 0.00%)  }
+        .           
+        .           std::pair<unsigned, unsigned> Reader::get_dimensions()
+        9 ( 0.00%)  {
+        3 ( 0.00%)      std::string line {};
+        8 ( 0.00%)  => ???:0x000000000010ee70 (1x)
+        .           
+       48 ( 0.00%)      while (std::getline(stream, line) && line[0] == '#')
+    2,239 ( 0.00%)  => ???:0x000000000010e910 (2x)
+       12 ( 0.00%)  => ???:0x000000000010edf0 (2x)
+       12 ( 0.00%)  => ???:0x000000000010f0a0 (2x)
+        .                   ;
+        .           
+        6 ( 0.00%)      std::regex regex { "^(\\d+) (\\d+)$" };
+1,620,180 ( 0.02%)  => /usr/include/c++/11/bits/regex.h:std::__cxx11::basic_regex<char, std::__cxx11::regex_traits<char> >::basic_regex(char const*, std::regex_constants::syntax_option_type) (1x)
+        3 ( 0.00%)      std::smatch matches {};
+      168 ( 0.00%)  => /usr/include/c++/11/bits/regex.h:std::__cxx11::match_results<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > >::match_results() (1x)
+        .           
+        6 ( 0.00%)      std::regex_match(line, matches, regex);
+   14,736 ( 0.00%)  => /usr/include/c++/11/bits/regex.h:bool std::regex_match<std::char_traits<char>, std::allocator<char>, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, char, std::__cxx11::regex_traits<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::match_results<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::const_iterator, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > >&, std::__cxx11::basic_regex<char, std::__cxx11::regex_traits<char> > const&, std::regex_constants::match_flag_type) (1x)
+        .           
+        5 ( 0.00%)      if (matches.ready()) {
+      134 ( 0.00%)  => /usr/include/c++/11/bits/regex.h:std::__cxx11::match_results<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > >::ready() const (1x)
+       44 ( 0.00%)          return { std::stoul(matches[1]), std::stoul(matches[2]) };
+      630 ( 0.00%)  => /usr/include/c++/11/bits/regex.h:std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::operator std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >() const (2x)
+      590 ( 0.00%)  => /usr/include/c++/11/bits/basic_string.h:std::__cxx11::stoul(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long*, int) (2x)
+      382 ( 0.00%)  => /usr/include/c++/11/bits/regex.h:std::__cxx11::match_results<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > >::operator[](unsigned long) const (2x)
+       16 ( 0.00%)  => ???:0x000000000010eb40 (2x)
+       38 ( 0.00%)  => /usr/include/c++/11/bits/stl_pair.h:std::pair<unsigned int, unsigned int>::pair<unsigned long, unsigned long, true>(unsigned long&&, unsigned long&&) (1x)
+        .               } else {
+        .                   return { 0, 0 };
+        .               }
+       16 ( 0.00%)  }
+    3,745 ( 0.00%)  => /usr/include/c++/11/bits/regex.h:std::__cxx11::basic_regex<char, std::__cxx11::regex_traits<char> >::~basic_regex() (1x)
+      286 ( 0.00%)  => /usr/include/c++/11/bits/regex.h:std::__cxx11::match_results<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > >::~match_results() (1x)
+      104 ( 0.00%)  => ???:0x000000000010eb40 (1x)
+        .           
+        .           unsigned Reader::get_color_max()
+        9 ( 0.00%)  {
+        3 ( 0.00%)      std::string line {};
+        8 ( 0.00%)  => ???:0x000000000010ee70 (1x)
+        .           
+        5 ( 0.00%)      std::getline(stream, line);
+      231 ( 0.00%)  => ???:0x000000000010e910 (1x)
+        .           
+        6 ( 0.00%)      std::regex regex { "^(\\d+)$" };
+  813,078 ( 0.01%)  => /usr/include/c++/11/bits/regex.h:std::__cxx11::basic_regex<char, std::__cxx11::regex_traits<char> >::basic_regex(char const*, std::regex_constants::syntax_option_type) (1x)
+        3 ( 0.00%)      std::smatch matches {};
+      168 ( 0.00%)  => /usr/include/c++/11/bits/regex.h:std::__cxx11::match_results<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > >::match_results() (1x)
+        .           
+        6 ( 0.00%)      std::regex_match(line, matches, regex);
+   10,542 ( 0.00%)  => /usr/include/c++/11/bits/regex.h:bool std::regex_match<std::char_traits<char>, std::allocator<char>, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, char, std::__cxx11::regex_traits<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::match_results<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::const_iterator, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > >&, std::__cxx11::basic_regex<char, std::__cxx11::regex_traits<char> > const&, std::regex_constants::match_flag_type) (1x)
+        .           
+        5 ( 0.00%)      if (matches.ready()) {
+      134 ( 0.00%)  => /usr/include/c++/11/bits/regex.h:std::__cxx11::match_results<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > >::ready() const (1x)
+       19 ( 0.00%)          return std::stoul(matches[1]);
+      315 ( 0.00%)  => /usr/include/c++/11/bits/regex.h:std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::operator std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >() const (1x)
+      295 ( 0.00%)  => /usr/include/c++/11/bits/basic_string.h:std::__cxx11::stoul(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long*, int) (1x)
+      191 ( 0.00%)  => /usr/include/c++/11/bits/regex.h:std::__cxx11::match_results<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > >::operator[](unsigned long) const (1x)
+        8 ( 0.00%)  => ???:0x000000000010eb40 (1x)
+        .               } else {
+        .                   return 0;
+        .               }
+       16 ( 0.00%)  }
+    2,501 ( 0.00%)  => /usr/include/c++/11/bits/regex.h:std::__cxx11::basic_regex<char, std::__cxx11::regex_traits<char> >::~basic_regex() (1x)
+      286 ( 0.00%)  => /usr/include/c++/11/bits/regex.h:std::__cxx11::match_results<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > >::~match_results() (1x)
+        8 ( 0.00%)  => ???:0x000000000010eb40 (1x)
+        .           
+        .           std::tuple<unsigned char*, unsigned char*, unsigned char*> Reader::get_data(unsigned x_size, unsigned y_size)
+       11 ( 0.00%)  {
+        3 ( 0.00%)      auto size { x_size * y_size };
+       12 ( 0.00%)      auto R { new char[size] }, G { new char[size] }, B { new char[size] };
+    1,198 ( 0.00%)  => ???:0x000000000010e8a0 (3x)
+        .           
+2,578,946 ( 0.04%)      for (auto i { 0 }, read { 0 }; i < size; i++, read = 0) {
+4,642,092 ( 0.07%)          stream.read(R + i, 1);
+61,378,774 ( 0.90%)  => ???:0x000000000010ee00 (515,788x)
+3,610,516 ( 0.05%)          read += stream.gcount();
+2,578,940 ( 0.04%)  => ???:0x000000000010f0b0 (515,788x)
+4,642,092 ( 0.07%)          stream.read(G + i, 1);
+61,378,787 ( 0.90%)  => ???:0x000000000010ee00 (515,788x)
+3,610,516 ( 0.05%)          read += stream.gcount();
+2,578,940 ( 0.04%)  => ???:0x000000000010f0b0 (515,788x)
+4,642,092 ( 0.07%)          stream.read(B + i, 1);
+61,378,774 ( 0.90%)  => ???:0x000000000010ee00 (515,788x)
+3,610,516 ( 0.05%)          read += stream.gcount();
+2,578,940 ( 0.04%)  => ???:0x000000000010f0b0 (515,788x)
+        .           
+1,031,576 ( 0.02%)          if (read != 3) {
+        .                       delete[] R;
+        .                       delete[] G;
+        .                       delete[] B;
+        .                       return { nullptr, nullptr, nullptr };
+        .                   }
+        .               }
+        .           
+       12 ( 0.00%)      return { reinterpret_cast<unsigned char*>(R), reinterpret_cast<unsigned char*>(G), reinterpret_cast<unsigned char*>(B) };
+      245 ( 0.00%)  => /usr/include/c++/11/tuple:std::tuple<unsigned char*, unsigned char*, unsigned char*>::tuple<unsigned char*, unsigned char*, unsigned char*, true, true>(unsigned char*&&, unsigned char*&&, unsigned char*&&) (1x)
+        6 ( 0.00%)  }
+        .           
+        .           Matrix Reader::operator()(std::string filename)
+       13 ( 0.00%)  {
+        .               try {
+       13 ( 0.00%)          fill(filename);
+1,378,591 ( 0.02%)  => ppm.cpp:PPM::Reader::fill(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) (1x)
+    1,580 ( 0.00%)  => ???:0x000000000010ea40 (1x)
+        8 ( 0.00%)  => ???:0x000000000010eb40 (1x)
+        .           
+        6 ( 0.00%)          if (stream.fail()) {
+        6 ( 0.00%)  => ???:0x000000000010e890 (1x)
+        .                       throw std::runtime_error { "couldn't open file " + filename };
+        .                   }
+        .           
+        5 ( 0.00%)          auto magic { get_magic_number() };
+    6,895 ( 0.00%)  => ppm.cpp:PPM::Reader::get_magic_number[abi:cxx11]() (1x)
+        .           
+        7 ( 0.00%)          if (magic != magic_number) {
+      926 ( 0.00%)  => /usr/include/c++/11/bits/basic_string.h:bool std::operator!=<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) (1x)
+        .                       throw std::runtime_error { "incorrect magic number: " + magic };
+        .                   }
+        .           
+       12 ( 0.00%)          auto [x_size, y_size] { get_dimensions() };
+1,643,420 ( 0.02%)  => ppm.cpp:PPM::Reader::get_dimensions() (1x)
+       37 ( 0.00%)  => /usr/include/c++/11/utility:std::tuple_element<1ul, std::pair<unsigned int, unsigned int> >::type&& std::get<1ul, unsigned int, unsigned int>(std::pair<unsigned int, unsigned int>&&) (1x)
+       36 ( 0.00%)  => /usr/include/c++/11/utility:std::tuple_element<0ul, std::pair<unsigned int, unsigned int> >::type&& std::get<0ul, unsigned int, unsigned int>(std::pair<unsigned int, unsigned int>&&) (1x)
+        .           
+        8 ( 0.00%)          if (x_size == 0 || y_size == 0) {
+        .                       throw std::runtime_error { "couldn't read dimensions" };
+        .                   }
+        .           
+        6 ( 0.00%)          auto total_size { x_size * y_size };
+        .           
+        2 ( 0.00%)          if (total_size > max_pixels) {
+        .                       throw std::runtime_error { "image size is too big: " + std::to_string(total_size) };
+        .                   }
+        .           
+        4 ( 0.00%)          auto color_max { get_color_max() };
+  827,837 ( 0.01%)  => ppm.cpp:PPM::Reader::get_color_max() (1x)
+        .           
+        2 ( 0.00%)          if (color_max == 0) {
+        .                       throw std::runtime_error { "couldn't read color max" };
+        .                   }
+        .           
+       20 ( 0.00%)          auto [R, G, B] { get_data(x_size, y_size) };
+220,242,988 ( 3.22%)  => ppm.cpp:PPM::Reader::get_data(unsigned int, unsigned int) (1x)
+       47 ( 0.00%)  => /usr/include/c++/11/tuple:std::tuple_element<1ul, std::tuple<unsigned char*, unsigned char*, unsigned char*> >::type&& std::get<1ul, unsigned char*, unsigned char*, unsigned char*>(std::tuple<unsigned char*, unsigned char*, unsigned char*>&&) (1x)
+       47 ( 0.00%)  => /usr/include/c++/11/tuple:std::tuple_element<0ul, std::tuple<unsigned char*, unsigned char*, unsigned char*> >::type&& std::get<0ul, unsigned char*, unsigned char*, unsigned char*>(std::tuple<unsigned char*, unsigned char*, unsigned char*>&&) (1x)
+       46 ( 0.00%)  => /usr/include/c++/11/tuple:std::tuple_element<2ul, std::tuple<unsigned char*, unsigned char*, unsigned char*> >::type&& std::get<2ul, unsigned char*, unsigned char*, unsigned char*>(std::tuple<unsigned char*, unsigned char*, unsigned char*>&&) (1x)
+        .           
+       12 ( 0.00%)          if (!R || !G || !B) {
+        .                       throw std::runtime_error { "couldn't read image data" };
+        .                   }
+        .           
+        5 ( 0.00%)          stream.clear();
+        9 ( 0.00%)  => ???:0x000000000010efa0 (1x)
+       17 ( 0.00%)          return Matrix { R, G, B, x_size, y_size, color_max };
+       30 ( 0.00%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::Matrix(unsigned char*, unsigned char*, unsigned char*, unsigned int, unsigned int, unsigned int) (1x)
+        3 ( 0.00%)      } catch (std::runtime_error e) {
+        8 ( 0.00%)  => ???:0x000000000010eb40 (1x)
+        .                   error("reading", e.what());
+        .                   stream.clear();
+        .                   return Matrix {};
+        .               }
+       11 ( 0.00%)  }
+        .           
+        .           void error(std::string op, std::string what)
+        .           {
+        .               std::cerr << "Encountered PPM error during " << op << ": " << what << std::endl;
+        .           }
+        .           
+        .           void Writer::operator()(Matrix m, std::string filename)
+       13 ( 0.00%)  {
+        .               try {
+        3 ( 0.00%)          std::ofstream f {};
+      916 ( 0.00%)  => ???:0x000000000010efb0 (1x)
+        .           
+        6 ( 0.00%)          f.open(filename);
+      959 ( 0.00%)  => ???:0x000000000010eaa0 (1x)
+        .           
+        6 ( 0.00%)          if (!f) {
+        6 ( 0.00%)  => ???:0x000000000010ea80 (1x)
+        .                       throw std::runtime_error { "failed to open " + filename };
+        .                   }
+        .           
+        9 ( 0.00%)          f << magic_number << std::endl;
+    4,470 ( 0.00%)  => ???:0x000000000010ecf0 (1x)
+    3,257 ( 0.00%)  => ???:0x000000000010eca0 (1x)
+        .           
+       24 ( 0.00%)          f << m.get_x_size() << " " << m.get_y_size() << std::endl;
+      315 ( 0.00%)  => ???:0x000000000010ecf0 (1x)
+      222 ( 0.00%)  => ???:0x000000000010eca0 (1x)
+    2,926 ( 0.00%)  => ???:0x000000000010ee50 (2x)
+        8 ( 0.00%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::get_x_size() const (1x)
+        8 ( 0.00%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::get_y_size() const (1x)
+       12 ( 0.00%)          f << m.get_color_max() << std::endl;
+      315 ( 0.00%)  => ???:0x000000000010ecf0 (1x)
+      366 ( 0.00%)  => ???:0x000000000010ee50 (1x)
+        8 ( 0.00%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::get_color_max() const (1x)
+        .           
+        9 ( 0.00%)          auto size { m.get_x_size() * m.get_y_size() };
+        8 ( 0.00%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::get_y_size() const (1x)
+        8 ( 0.00%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::get_x_size() const (1x)
+       12 ( 0.00%)          auto R { m.get_R() }, G { m.get_G() }, B { m.get_B() };
+        8 ( 0.00%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::get_G() const (1x)
+        8 ( 0.00%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::get_R() const (1x)
+        8 ( 0.00%)  => /home/hahh24/dv1674_a2/blur/matrix.cpp:Matrix::get_B() const (1x)
+        6 ( 0.00%)          auto it_R { R }, it_G { G }, it_B { B };
+        .           
+7,736,826 ( 0.11%)          while (it_R < R + size && it_G < G + size && it_B < B + size) {
+2,063,152 ( 0.03%)              f << *it_R++
+2,063,152 ( 0.03%)                << *it_G++
+9,799,972 ( 0.14%)                << *it_B++;
+139,291,524 ( 2.04%)  => ???:0x000000000010eef0 (1,547,364x)
+        .                   }
+        .           
+        3 ( 0.00%)          f.close();
+      848 ( 0.00%)  => ???:0x000000000010eea0 (1x)
+        3 ( 0.00%)      } catch (std::runtime_error e) {
+      153 ( 0.00%)  => ???:0x000000000010eee0 (1x)
+        .                   error("writing", e.what());
+        .               }
+       10 ( 0.00%)  }
+        .           
+       21 ( 0.00%)  }
+      127 ( 0.00%)  => ppm.cpp:__static_initialization_and_destruction_0(int, int) (1x)
+
+--------------------------------------------------------------------------------
+-- Auto-annotated source: matrix.cpp
+--------------------------------------------------------------------------------
+Ir                   
+
+-- line 2 ----------------------------------------
+          .           Author: David Holmqvist <daae19@student.bth.se>
+          .           */
+          .           
+          .           #include "matrix.hpp"
+          .           #include "ppm.hpp"
+          .           #include <fstream>
+          .           #include <stdexcept>
+          .           
+          9 ( 0.00%)  Matrix::Matrix(unsigned char* R, unsigned char* G, unsigned char* B, unsigned x_size, unsigned y_size, unsigned color_max)
+          3 ( 0.00%)      : R { R }
+          3 ( 0.00%)      , G { G }
+          3 ( 0.00%)      , B { B }
+          3 ( 0.00%)      , x_size { x_size }
+          3 ( 0.00%)      , y_size { y_size }
+          3 ( 0.00%)      , color_max { color_max }
+          .           {
+          3 ( 0.00%)  }
+          .           
+          .           Matrix::Matrix()
+          .               : Matrix {
+          .                   nullptr,
+          .                   nullptr,
+          .                   nullptr,
+          .                   0,
+          .                   0,
+          .                   0,
+          .               }
+          .           {
+          .           }
+          .           
+          6 ( 0.00%)  Matrix::Matrix(unsigned dimension)
+          8 ( 0.00%)      : R { new unsigned char[dimension * dimension] }
+        308 ( 0.00%)  => ???:0x000000000010e8a0 (1x)
+          8 ( 0.00%)      , G { new unsigned char[dimension * dimension] }
+        310 ( 0.00%)  => ???:0x000000000010e8a0 (1x)
+          8 ( 0.00%)      , B { new unsigned char[dimension * dimension] }
+        310 ( 0.00%)  => ???:0x000000000010e8a0 (1x)
+          3 ( 0.00%)      , x_size { dimension }
+          3 ( 0.00%)      , y_size { dimension }
+          2 ( 0.00%)      , color_max { 0 }
+          .           {
+          3 ( 0.00%)  }
+          .           
+         18 ( 0.00%)  Matrix::Matrix(const Matrix& other)
+         33 ( 0.00%)      : R { new unsigned char[other.x_size * other.y_size] }
+      1,102 ( 0.00%)  => ???:0x000000000010e8a0 (3x)
+         33 ( 0.00%)      , G { new unsigned char[other.x_size * other.y_size] }
+      1,124 ( 0.00%)  => ???:0x000000000010e8a0 (3x)
+         33 ( 0.00%)      , B { new unsigned char[other.x_size * other.y_size] }
+        962 ( 0.00%)  => ???:0x000000000010e8a0 (3x)
+         12 ( 0.00%)      , x_size { other.x_size }
+         12 ( 0.00%)      , y_size { other.y_size }
+         12 ( 0.00%)      , color_max { other.color_max }
+          .           {
+     12,189 ( 0.00%)      for (auto x { 0 }; x < x_size; x++) {
+  9,298,380 ( 0.14%)          for (auto y { 0 }; y < y_size; y++) {
+ 32,494,644 ( 0.48%)              auto &r_val { r(x, y) }, &g_val { g(x, y) }, &b_val { b(x, y) };
+ 27,852,552 ( 0.41%)  => matrix.cpp:Matrix::r(unsigned int, unsigned int) (1,547,364x)
+ 27,852,552 ( 0.41%)  => matrix.cpp:Matrix::b(unsigned int, unsigned int) (1,547,364x)
+ 27,852,552 ( 0.41%)  => matrix.cpp:Matrix::g(unsigned int, unsigned int) (1,547,364x)
+ 32,494,644 ( 0.48%)              auto other_r_val { other.r(x, y) }, other_g_val { other.g(x, y) }, other_b_val { other.b(x, y) };
+ 29,399,916 ( 0.43%)  => matrix.cpp:Matrix::b(unsigned int, unsigned int) const (1,547,364x)
+ 29,399,916 ( 0.43%)  => matrix.cpp:Matrix::g(unsigned int, unsigned int) const (1,547,364x)
+ 29,399,916 ( 0.43%)  => matrix.cpp:Matrix::r(unsigned int, unsigned int) const (1,547,364x)
+          .           
+  4,642,092 ( 0.07%)              r_val = other_r_val;
+  4,642,092 ( 0.07%)              g_val = other_g_val;
+  4,642,092 ( 0.07%)              b_val = other_b_val;
+          .                   }
+          .               }
+         12 ( 0.00%)  }
+          .           
+          .           Matrix& Matrix::operator=(const Matrix other)
+          .           {
+          .               if (this == &other) {
+          .                   return *this;
+          .               }
+          .           
+          .               this->~Matrix();
+-- line 68 ----------------------------------------
+-- line 84 ----------------------------------------
+          .                       g_val = other_g_val;
+          .                       b_val = other_b_val;
+          .                   }
+          .               }
+          .           
+          .               return *this;
+          .           }
+          .           
+         25 ( 0.00%)  Matrix::~Matrix()
+          .           {
+         20 ( 0.00%)      if (R) {
+         40 ( 0.00%)          delete[] R;
+        722 ( 0.00%)  => ???:0x000000000010ee20 (5x)
+         10 ( 0.00%)          R = nullptr;
+          .               }
+         20 ( 0.00%)      if (G) {
+         40 ( 0.00%)          delete[] G;
+        824 ( 0.00%)  => ???:0x000000000010ee20 (5x)
+         10 ( 0.00%)          G = nullptr;
+          .               }
+         20 ( 0.00%)      if (B) {
+         40 ( 0.00%)          delete[] B;
+        792 ( 0.00%)  => ???:0x000000000010ee20 (5x)
+         10 ( 0.00%)          B = nullptr;
+          .               }
+          .           
+         50 ( 0.00%)      x_size = y_size = color_max = 0;
+         15 ( 0.00%)  }
+          .           
+          .           unsigned Matrix::get_x_size() const
+ 30,952,704 ( 0.45%)  {
+ 15,476,352 ( 0.23%)      return x_size;
+ 15,476,352 ( 0.23%)  }
+          .           
+          .           unsigned Matrix::get_y_size() const
+ 35,079,000 ( 0.51%)  {
+ 17,539,500 ( 0.26%)      return y_size;
+ 17,539,500 ( 0.26%)  }
+          .           
+          .           unsigned Matrix::get_color_max() const
+          4 ( 0.00%)  {
+          2 ( 0.00%)      return color_max;
+          2 ( 0.00%)  }
+          .           
+          .           unsigned char const* Matrix::get_R() const
+          4 ( 0.00%)  {
+          2 ( 0.00%)      return R;
+          2 ( 0.00%)  }
+          .           
+          .           unsigned char const* Matrix::get_G() const
+          4 ( 0.00%)  {
+          2 ( 0.00%)      return G;
+          2 ( 0.00%)  }
+          .           
+          .           unsigned char const* Matrix::get_B() const
+          4 ( 0.00%)  {
+          2 ( 0.00%)      return B;
+          2 ( 0.00%)  }
+          .           
+          .           unsigned char Matrix::r(unsigned x, unsigned y) const
+  9,284,184 ( 0.14%)  {
+ 17,021,004 ( 0.25%)      return R[y * x_size + x];
+  3,094,728 ( 0.05%)  }
+          .           
+          .           unsigned char Matrix::g(unsigned x, unsigned y) const
+  9,284,184 ( 0.14%)  {
+ 17,021,004 ( 0.25%)      return G[y * x_size + x];
+  3,094,728 ( 0.05%)  }
+          .           
+          .           unsigned char Matrix::b(unsigned x, unsigned y) const
+  9,284,184 ( 0.14%)  {
+ 17,021,004 ( 0.25%)      return B[y * x_size + x];
+  3,094,728 ( 0.05%)  }
+          .           
+          .           unsigned char& Matrix::r(unsigned x, unsigned y)
+205,274,616 ( 3.00%)  {
+342,124,360 ( 5.00%)      return R[y * x_size + x];
+ 68,424,872 ( 1.00%)  }
+          .           
+          .           unsigned char& Matrix::g(unsigned x, unsigned y)
+205,274,616 ( 3.00%)  {
+342,124,360 ( 5.00%)      return G[y * x_size + x];
+ 68,424,872 ( 1.00%)  }
+          .           
+          .           unsigned char& Matrix::b(unsigned x, unsigned y)
+205,274,616 ( 3.00%)  {
+342,124,360 ( 5.00%)      return B[y * x_size + x];
+ 68,424,893 ( 1.00%)  }
+        127 ( 0.00%)  => matrix.cpp:__static_initialization_and_destruction_0(int, int) (1x)
+
+--------------------------------------------------------------------------------
+The following files chosen for auto-annotation could not be found:
+--------------------------------------------------------------------------------
+  ./math/../sysdeps/ieee754/dbl-64/e_exp.c
+  ./math/../sysdeps/ieee754/dbl-64/math_config.h
+  ./math/./w_exp_template.c
+  ./string/../sysdeps/x86_64/multiarch/memmove-vec-unaligned-erms.S
+
+--------------------------------------------------------------------------------
+Ir                     
+--------------------------------------------------------------------------------
+5,601,899,893 (81.91%)  events annotated
+
